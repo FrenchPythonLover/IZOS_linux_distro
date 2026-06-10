@@ -4,6 +4,7 @@ qemu-system-x86_64 \
   -kernel ./linux/bzImage \
   -initrd ./linux/initramfs.cpio.gz \
   -m 1024M \
-  -serial stdio \
+  -serial mon:stdio \
+  -nographic \
   -append "console=ttyS0 loglevel=9 init=/init"
 
