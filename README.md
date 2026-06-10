@@ -36,7 +36,8 @@ IZOS is a Linux distribution built from scratch. It is not based on an existing 
 - [Included Software](#whats-included)
 - [Running IZOS](#how-do-i-run-this)
 - [Networking](#networking)
-- [(Re)Building images](#building-images)
+- [(Re)Building IZOS](#building-izos)
+- [Boot Flow](#boot-flow)
 - [Roadmap](#roadmap)
 - [Contributing](#contribute)
 
@@ -63,13 +64,16 @@ root/
 ├─ apps_ext/ -- extmount apps source & compiled
 ├─ fs/ -- initramfs filesystem uncompressed
 ├─ fs_ext/ -- extmount filesystem unimged
-├─ linux/ -- Linux kernel source
+├─ linux/ -- Linux kernel source & images
+│  ├─ src/ -- Kernel source
+|  ├─ compile.sh -- IZOS full compilation script (omitting apps)
+|  ├─ bzImage -- IZOS kernel image
+|  ├─ initramfs.cpio.gz -- initramfs edition file
 ├─ createextfs.sh -- extmount fs creation tool 
 ├─ makeinitramfs.sh -- initramfs gz creation tool
 ├─ test -- Run initramfs IZOS on qemu
 ├─ test_ext -- Run extmount IZOS on qemu
 ├─ (eventually) fs_ext.img -- The extmount filesystem in its IMGed form
-├─ (eventually) initramfs.cpio.gz -- The initramfs in its compressed form
 ```
 
 ## What's included
@@ -104,16 +108,18 @@ If you want to launch the ext izos, generate the ext file using `./createextfs.s
 Actually, networking on IZOS might be supported on ethernet but hasn't been tested on ethernet-equipped real hardware.  
 WiFi is actually in development.  
 
-## Building images
+## Building IZOS
+To build IZOS, just run those commands:  
+```bash
+# CD to building directory
+cd ./linux
+# Clean everything (Recommended)
+./clean.sh
+# Run build script
+./compile.sh
 ```
-./makeinitramfs.sh
-```
-Build the compressed initramfs image.
-
-```
-./createextfs.sh
-```
-Build the extmount filesystem image.
+## Boot flow
+![bootflow image](docs/bootflow.png)
 
 ## Roadmap
 - [x] Custom init system
@@ -127,6 +133,7 @@ Build the extmount filesystem image.
 
 # Contribute
 Feel free to contribute by submitting pull requests !
+
 
 ### Stats
 <img src="https://img.shields.io/github/stars/FrenchPythonLover/IZOS_linux_distro?style=flat">
