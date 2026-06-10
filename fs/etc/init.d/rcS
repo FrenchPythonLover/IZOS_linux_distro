@@ -1,0 +1,111 @@
+#!/bin/busybox sh
+####################
+### IZOS INIT SCRIPT
+####################
+
+set -e
+
+### Montage des partitions importantes
+echo "Montage de partitions..."
+mount -t devtmpfs devtmpfs /dev
+mkdir -p /dev/pts
+mount -t devpts devpts /dev/pts
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+mkdir -p /tmp
+chmod 1777 /tmp
+
+
+## French keymap
+## to decomment if needed
+#loadkmap < /etc/fr.kmap # To be removed since kmscon handles xkb keymaps ??????
+
+echo -e "Welcome on \x1b[1;38;5;12;49mIZOS \x1b[0;39;49m!"
+
+### Verifying the extmount option in cmdline 
+if grep -q "extmount" /proc/cmdline; then
+    echo "EXTMOUNT detected, mouting external system..."
+    
+    # Extraction of the extmount option (ex: extmount=/dev/sda1)
+    EXTMOUNT=$(cat /proc/cmdline | tr ' ' '\n' | grep "^extmount=" | cut -d'=' -f2)
+    
+    if [ -z "$EXTMOUNT" ]; then
+        echo "ERROR: extmount specified without file system"
+        echo "Usage: extmount=/dev/sdXY"
+        sleep 5
+    else
+        # Wait for the FS to be ready
+        echo "Waiting for $EXTMOUNT..."
+        TIMEOUT=5
+        while [ ! -b "$EXTMOUNT" ] && [ $TIMEOUT -gt 0 ]; do
+            sleep 1
+            TIMEOUT=$((TIMEOUT - 1))
+        done
+        
+        if [ ! -b "$EXTMOUNT" ]; then
+            echo "ERROR: $EXTMOUNT not found"
+            sleep 5
+        else
+            # Create new mouting point
+            mkdir -p /newroot
+            
+            # Mount new system
+            if mount -o ro "$EXTMOUNT" /newroot; then
+                echo "External system mounted successfully"
+                
+	# Verify the presence of real init
+		if [ -x /newroot/sbin/init ]; then
+			echo "Switching to external system..."
+
+
+			mount -t proc proc /newroot/proc
+			mount -t sysfs sysfs /newroot/sys
+			mount -t devtmpfs devtmpfs /newroot/dev
+
+			# Clean old root
+			umount /proc
+			umount /sys
+			umount /dev
+
+			# real switch root
+			exec switch_root /newroot /sbin/init
+
+		else
+		    echo "ERROR: /sbin/init not found on external system"
+		    ls -l /newroot/sbin || true
+		    umount /newroot
+		    sleep 5
+		fi
+
+            else
+                echo "ERROR: cant mount $EXTMOUNT"
+                sleep 5
+            fi
+        fi
+    fi
+    
+    echo "Failed to mount external system, switching to initramfs..."
+fi
+
+### Mode initramfs normal
+echo "Booting into initramfs mode..."
+
+### Lancement du shell kmscon
+
+# comment out the unwanted language.
+# french
+export LANG=fr_FR.UTF-8
+export LC_ALL=fr_FR.UTF-8
+export XKB_CONFIG_ROOT=/usr/share/xkeyboard-config-2
+kmscon --vt=2 \
+       --xkb-model=pc105 \
+       --xkb-layout=fr
+# english
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export XKB_CONFIG_ROOT=/usr/share/xkeyboard-config-2
+kmscon --vt=2 \
+       --xkb-model=pc105 \
+       --xkb-layout=en
+
+

@@ -1,0 +1,6 @@
+{
+    "foo": "bar",
+    "baz": 1234,
+    "qux": [true, false, null],
+    "xyz": [NaN, -Infinity, Infinity]
+}

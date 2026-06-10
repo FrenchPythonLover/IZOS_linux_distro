@@ -1,0 +1,9 @@
+# IZOS ext run. needs to have fs_ext.img on the same folder.
+qemu-system-x86_64 \
+  -enable-kvm \
+  -kernel ./linux/bzImage \
+  -initrd ./linux/initramfs.cpio.gz \
+  -m 1024M \
+  -serial stdio \
+  -drive file=fs_ext.img,if=ide,format=raw \
+  -append "console=ttyS0 loglevel=9 init=/init extmount=/dev/sda"
