@@ -1,0 +1,9 @@
+# IZOS standard run.
+qemu-system-x86_64 \
+  -enable-kvm \
+  -kernel ./linux/bzImage \
+  -initrd ./linux/initramfs.cpio.gz \
+  -m 1024M \
+  -serial stdio \
+  -append "console=ttyS0 loglevel=9 init=/init"
+

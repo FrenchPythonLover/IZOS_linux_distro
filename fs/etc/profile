@@ -1,0 +1,45 @@
+###### export PS1="\033[0;32m\u@\h\033[0m:\033[0;34m\w\033[0m\033[0;33m$ \033[0m"
+# /etc/profile – IZOS minimal profile
+# Couleurs ANSI
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+YELLOW="\033[0;33m"
+BLUE="\033[0;34m"
+MAGENTA="\033[0;35m"
+CYAN="\033[0;36m"
+RESET="\033[0m"
+
+# Vérifier si le terminal supporte les couleurs
+if [ -t 1 ]; then
+    USE_COLOR=1
+else
+    USE_COLOR=0
+fi
+
+# Fonction pour construire le PS1
+set_prompt() {
+    if [ "$USE_COLOR" -eq 1 ]; then
+        # Root = rouge + #
+
+        if [ "$(id -u)" -eq 0 ]; then
+            PS1="${RED}\u@\h${RESET}:${BLUE}\w${RESET}${YELLOW} # ${RESET}"
+        else
+            # User normal = vert + $
+            PS1="${GREEN}\u@\h${RESET}:${BLUE}\w${RESET}${YELLOW} $ ${RESET}"
+        fi
+    else
+        # Sans couleurs
+        if [ "$(id -u)" -eq 0 ]; then
+            PS1="\u@\h:\w # "
+        else
+            PS1="\u@\h:\w $ "
+        fi
+    fi
+}
+
+set_prompt
+export PS1
+export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+
+# Si tu veux un message à la connexion
+[ -f /etc/motd ] && cat /etc/motd

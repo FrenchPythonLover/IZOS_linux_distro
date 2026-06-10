@@ -1,0 +1,6 @@
+qemu-system-x86_64 \
+  -kernel ~/programmation/IZOS/real/src/linux/arch/x86/boot/bzImage \
+  -initrd ~/programmation/IZOS/real/src/linux/initramfs.cpio.gz \
+  -m 512M \
+  -append "console=tty0 loglevel=5" # Calibré
+
