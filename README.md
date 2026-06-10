@@ -93,6 +93,7 @@ every one of the above has been tested and runs great on my OS.
 
 ## How do I run this?
 First, you need to modify the system root to your preferred language: Open ./fs/etc/init.d/rcS, scroll all the way to the bottom and follow the instructions.  
+Then, compile the initramfs for IZOS.To do this run the command `./makeinitramfs.sh` (more on building IZOS below), then grab yourself a coffee and wait, because it's going to take a bit of time.  
 Let's boot IZOS ! For the moment, you can only run this using QEMU, on Linux.  
 First of all, install `qemu-system-x86_64` on your distro.  
 Then, to launch ramdisk IZOS, run `./test`, a new window will appear: it's the TTY, on the terminal that launched the command however, its the serial output where you can debug IZOS.  
@@ -117,6 +118,9 @@ cd ./linux
 ./clean.sh
 # Run build script
 ./compile.sh
+
+## -- OR only build initramfs (if linux/bzImage is already present)
+./makeinitramfs.sh
 ```
 ## Boot flow
 ![bootflow image](docs/bootflow.png)

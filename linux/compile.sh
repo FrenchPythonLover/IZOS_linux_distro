@@ -10,7 +10,5 @@ mv arch/x86_64/boot/bzImage ../
 cd ../../
 echo "Packing initramfs..."
 ./makeinitramfs.sh
-# Copy to out dir
-mv ./initramfs.cpio.gz ./linux/
 
 echo "Compilation done !"
