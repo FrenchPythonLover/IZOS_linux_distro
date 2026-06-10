@@ -15,7 +15,7 @@ echo "Génération de l'initramfs depuis : $FS_DIR"
 cd "$FS_DIR" || exit 1
 
 # Generate initramfs
-find . -print0 | cpio --null -ov --format=newc | gzip -9 > "$OUTPUT"
+find . -print0 | cpio --null -ov --format=newc | gzip -1 > "$OUTPUT" # great for dev but on release gzip -9 instead of -1 for smaller size.
 mv $OUTPUT ../linux
 
 echo "Created initramfs !"
