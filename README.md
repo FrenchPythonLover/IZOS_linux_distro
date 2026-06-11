@@ -92,8 +92,9 @@ IZOS comes with a bit of programs:
 every one of the above has been tested and runs great on my OS.  
 
 ## How do I run this?
-First, you need to modify the system root to your preferred language: Open ./fs/etc/init.d/rcS, scroll all the way to the bottom and follow the instructions.  
-Then, compile the initramfs for IZOS.To do this run the command `./makeinitramfs.sh` (more on building IZOS below), then grab yourself a coffee and wait, because it's going to take a bit of time.  
+First, let's clone the repository, by either running `git clone https://github.com/FrenchPythonLover/IZOS_linux_repo` or downloading the repo's ZIP file. Next, you'll need to modify the system root to your preferred language: Open ./fs/etc/init.d/rcS, scroll all the way to the bottom and follow the instructions.  
+Then, you need to get the `initramfs` for IZOS, for this you can either get the initramfs from [here](https://github.com/FrenchPythonLover/IZOS_linux_distro/releases/latest), then copy it over to `linux/`,  
+Or, compile the initramfs for IZOS: Run the command `./makeinitramfs.sh` (more on building IZOS below), then grab yourself a coffee and wait, because it's going to take a bit of time.  
 Let's boot IZOS ! For the moment, you can only run this using QEMU, on Linux.  
 First of all, install `qemu-system-x86_64` on your distro.  
 Then, to launch ramdisk IZOS, run `./test`, a new window will appear: it's the TTY, on the terminal that launched the command however, its the serial output where you can debug IZOS.  
